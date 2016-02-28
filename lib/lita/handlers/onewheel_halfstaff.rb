@@ -42,11 +42,11 @@ module Lita
       end
 
       def is_at_half_staff(text)
-        Lita.logger.info "Checking for flag date match on #{text}"
         half_staff = false
         pieces = text.split(/ - /)
         current_year = Date::today.year
         if pieces[0].match(/#{current_year}/)
+          Lita.logger.info "Checking for flag date match on #{text}"
           if date_matches = pieces[0].match(/(\w+\s+\d+,\s+\d+)/)   # February 26, 2016
             # Lita.logger.info 'Standard'
             # Lita.logger.info date_matches[1]
