@@ -16,5 +16,6 @@ gem 'lita-onewheel-halfstaff'
 ## Usage
 
 !halfstaff - get current half staff notices.
+
 !halfstaff history - Get a link to the history of flying flags half-mast.
 
