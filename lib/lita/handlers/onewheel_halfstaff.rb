@@ -9,30 +9,32 @@ module Lita
             command: true
 
       def get_flag_status(response)
-        if flag_array = get_flag_data
-          Lita.logger.info 'Got a match on the flag.'
-          reply = flag_array
-        else
+        flag_data = get_flag_data
+        if flag_data.empty?
           Lita.logger.info 'No flag match for today.'
-          reply = ["Everything's cool, yo."].sample
+          response.reply ["Everything's cool, yo.", 'No half staff known.'].sample
+        else
+          Lita.logger.info 'Got a match on the flag.'
+          flag_data.each do |reply|
+            response.reply reply
+          end
         end
-
-        Lita.logger.info reply.inspect
-        response.reply reply.to_s
       end
 
       def get_flag_data
         flag_html = RestClient.get 'http://www.flagsexpress.com/HalfStaff_s/1852.htm'
+        results = []
         noko_flag = Nokogiri::HTML flag_html
         noko_flag.css('a').each do |a_tag|
           if a_tag['href'].match /http\:\/\/www\.flagsexpress\.com\/Articles\.asp\?ID\=/i
             if is_at_half_staff(a_tag.text)
               pieces = a_tag.text.split(/ - /)
-              Lita.logger.info "Returning flag data"
-              return "#{pieces[1]} - #{pieces[2]} - #{a_tag['href']}"
+              Lita.logger.info 'Returning flag data'
+              results.push "#{pieces[1]} - #{pieces[2]} - #{a_tag['href']}"
             end
           end
         end
+        results
       end
 
       def is_at_half_staff(text)
