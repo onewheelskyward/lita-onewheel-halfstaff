@@ -1,5 +1,5 @@
 Gem::Specification.new do |spec|
-  spec.name          = 'lita-onewheel-'
+  spec.name          = 'lita-onewheel-halfstaff'
   spec.version       = '0.0.0'
   spec.authors       = ['Andrew Kreps']
   spec.email         = ['andrew.kreps@gmail.com']
