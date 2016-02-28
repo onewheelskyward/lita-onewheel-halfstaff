@@ -8,6 +8,10 @@ module Lita
             :get_flag_status,
             command: true
 
+      route /^halfstaff history$/,
+            :get_history,
+            command: true
+
       def get_flag_status(response)
         flag_data = get_flag_data
         if flag_data.empty?
@@ -73,6 +77,10 @@ module Lita
         start_time = DateTime::parse("#{month_start} #{day_start} #{current_year} 00:00")
         end_time = DateTime::parse("#{month_end} #{day_end} #{current_year} 23:59")
         return (start_time..end_time).include? Time.now
+      end
+
+      def get_history(response)
+        response.reply 'https://en.wikipedia.org/wiki/Half-mast'
       end
 
       Lita.register_handler(self)

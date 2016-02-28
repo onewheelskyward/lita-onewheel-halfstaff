@@ -3,9 +3,9 @@ Gem::Specification.new do |spec|
   spec.version       = '0.0.0'
   spec.authors       = ['Andrew Kreps']
   spec.email         = ['andrew.kreps@gmail.com']
-  spec.description   = %q{Lita interface to Automatic Pancake.}
+  spec.description   = %q{View the current US flag half-staff status.}
   spec.summary       = %q{See above.}
-  spec.homepage      = 'https://github.com/onewheelskyward/lita-onewheel-'
+  spec.homepage      = 'https://github.com/onewheelskyward/lita-onewheel-halfstaff'
   spec.license       = 'MIT'
   spec.metadata      = { 'lita_plugin_type' => 'handler'}
 
@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'simplecov', '~> 0.10'
   spec.add_development_dependency 'coveralls', '~> 0.8'
 
-  spec.add_runtime_dependency 'timecop', '~> 0.8'
+  spec.add_development_dependency 'timecop', '~> 0.8'
 end
