@@ -4,11 +4,11 @@ require 'restclient'
 module Lita
   module Handlers
     class OnewheelHalfstaff < Handler
-      route /^halfstaff$/,
+      route /^half(staff|mast)$/,
             :get_flag_status,
             command: true
 
-      route /^halfstaff history$/,
+      route /^half(staff|mast) history$/,
             :get_history,
             command: true
 

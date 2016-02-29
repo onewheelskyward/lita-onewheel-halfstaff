@@ -10,6 +10,8 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
 
   it { is_expected.to route_command('halfstaff') }
   it { is_expected.to route_command('halfstaff history') }
+  it { is_expected.to route_command('halfmast') }
+  it { is_expected.to route_command('halfmast history') }
 
   it 'gives half-staff status' do
     send_command 'halfstaff'
