@@ -6,11 +6,13 @@ module Lita
     class OnewheelHalfstaff < Handler
       route /^half(staff|mast)$/,
             :get_flag_status,
-            command: true
+            command: true,
+            help: {'halfstaff' => 'Get any current half staff information from flagsexpress.com.'}
 
       route /^half(staff|mast) history$/,
             :get_history,
-            command: true
+            command: true,
+            help: {'halfstaff history' => 'Get the wikipedia history of lowering the flag to half staff(mast).'}
 
       def get_flag_status(response)
         flag_data = get_flag_data
