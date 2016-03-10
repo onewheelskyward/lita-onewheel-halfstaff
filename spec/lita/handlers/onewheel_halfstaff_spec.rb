@@ -24,8 +24,8 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
     Timecop.freeze(Time.local(2016, 2, 26, 10, 5, 0)) do
       send_command 'halfstaff'
       expect(replies.count).to eq(2)
-      expect(replies[0]).to eq('KANSAS ONLY - Honoring  the victims of the Hesston shootings - http://www.flagsexpress.com/Articles.asp?ID=546')
-      expect(replies[1]).to eq('MINNESOTA ONLY - Honoring Marine Corps Sergeant and Delano, Minnesota resident Dillion J. Semolina - http://www.flagsexpress.com/Articles.asp?ID=545')
+      expect(replies[0]).to eq('KANSAS ONLY - Honoring  the victims of the Hesston shootings - www.flagsexpress.com/Articles.asp?ID=546')
+      expect(replies[1]).to eq('MINNESOTA ONLY - Honoring Marine Corps Sergeant and Delano, Minnesota resident Dillion J. Semolina - www.flagsexpress.com/Articles.asp?ID=545')
     end
   end
 
@@ -33,8 +33,8 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
     Timecop.freeze(Time.local(2016, 3, 9, 10, 5, 0)) do
       send_command 'halfstaff'
       expect(replies.count).to eq(2)
-      expect(replies[0]).to eq('COLORADO ONLY - Honoring Las Animas County Deputy Sheriff Travis Russell  - http://www.flagsexpress.com/Articles.asp?ID=552')
-      expect(replies[1]).to eq('ENTIRE UNITED STATES - Honoring Nancy Reagan  - http://www.flagsexpress.com/Articles.asp?ID=550')
+      expect(replies[0]).to eq('COLORADO ONLY - Honoring Las Animas County Deputy Sheriff Travis Russell  - www.flagsexpress.com/Articles.asp?ID=552')
+      expect(replies[1]).to eq('ENTIRE UNITED STATES - Honoring Nancy Reagan  - www.flagsexpress.com/Articles.asp?ID=550')
     end
   end
 

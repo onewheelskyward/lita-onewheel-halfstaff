@@ -36,11 +36,16 @@ module Lita
             if is_at_half_staff(a_tag.text)
               pieces = a_tag.text.split(/ - /)
               Lita.logger.info 'Returning flag data'
-              results.push "#{pieces[1]} - #{pieces[2]} - #{a_tag['href']}"
+              results.push build_result_tet(pieces[1], pieces[2], a_tag['href'])
             end
           end
         end
         results
+      end
+
+      def build_result_tet(hwhen, where, link)
+        link.sub! /https*\:\/\//, ''
+        "#{hwhen} - #{where} - #{link}"
       end
 
       def is_at_half_staff(text)
