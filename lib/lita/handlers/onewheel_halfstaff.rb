@@ -65,6 +65,12 @@ module Lita
             end_month = date_matches[3]
             end_day = date_matches[4]
             half_staff = does_today_match_date_range(start_month, start_day, end_month, end_day, current_year)
+          elsif date_matches = pieces[0].match(/(\w+)\s+(\d+) until the (\d+)\w+, (\d+)/i)   # March 7 until the 11th, 2016
+            # Lita.logger.info 'until sunset'
+            start_month = date_matches[1]
+            start_day = date_matches[2]
+            end_day = date_matches[3]
+            half_staff = does_today_match_date_range(start_month, start_day, start_month, end_day, current_year)
           else
             Lita.logger.info "Couldn't match #{pieces[0]}"
           end
@@ -73,10 +79,10 @@ module Lita
         half_staff
       end
 
-      def does_today_match_date_range(month_start, day_start, month_end, day_end, current_year)
-        start_time = DateTime::parse("#{month_start} #{day_start} #{current_year} 00:00")
-        end_time = DateTime::parse("#{month_end} #{day_end} #{current_year} 23:59")
-        return (start_time..end_time).include? Time.now
+      def does_today_match_date_range(start_month, start_day, end_month, end_day, current_year)
+        start_time = DateTime::parse("#{start_month} #{start_day} #{current_year} 00:00")
+        end_time = DateTime::parse("#{end_month} #{end_day} #{current_year} 23:59:59")
+        return (start_time..end_time).cover? DateTime.now
       end
 
       def get_history(response)
