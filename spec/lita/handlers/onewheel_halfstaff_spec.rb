@@ -14,8 +14,10 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
   it { is_expected.to route_command('halfmast history') }
 
   it 'gives half-staff status' do
-    send_command 'halfstaff'
-    expect(["Everything's cool, yo.", "No half staff known."].include? replies.last).to be true
+    Timecop.freeze(Time.local(2016, 2, 2, 10, 5, 0)) do
+      send_command 'halfstaff'
+      expect(["Everything's cool, yo.", "No half staff known."].include? replies.last).to be true
+    end
   end
 
   it 'gives half-staff affirmative' do
@@ -30,9 +32,9 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
   it 'checks some edge cases for multi-day half staffs.' do
     Timecop.freeze(Time.local(2016, 3, 9, 10, 5, 0)) do
       send_command 'halfstaff'
-      # expect(replies.count).to eq(2)
-      expect(replies[0]).to eq('KANSAS ONLY - Honoring  the victims of the Hesston shootings - http://www.flagsexpress.com/Articles.asp?ID=546')
-      expect(replies[1]).to eq('MINNESOTA ONLY - Honoring Marine Corps Sergeant and Delano, Minnesota resident Dillion J. Semolina - http://www.flagsexpress.com/Articles.asp?ID=545')
+      expect(replies.count).to eq(2)
+      expect(replies[0]).to eq('COLORADO ONLY - Honoring Las Animas County Deputy Sheriff Travis Russell  - http://www.flagsexpress.com/Articles.asp?ID=552')
+      expect(replies[1]).to eq('ENTIRE UNITED STATES - Honoring Nancy Reagan  - http://www.flagsexpress.com/Articles.asp?ID=550')
     end
   end
 
