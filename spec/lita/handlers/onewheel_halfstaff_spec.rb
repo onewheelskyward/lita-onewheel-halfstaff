@@ -4,7 +4,10 @@ require 'timecop'
 
 describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
   before do
-    mock = File.open('spec/fixtures/halfstaff.html').read
+  end
+
+  def mock(file)
+    mock = File.open("spec/fixtures/#{file}.html").read
     allow(RestClient).to receive(:get) { mock }
   end
 
@@ -14,6 +17,7 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
   it { is_expected.to route_command('halfmast history') }
 
   it 'gives half-staff status' do
+    mock('halfstaff')
     Timecop.freeze(Time.local(2016, 2, 2, 10, 5, 0)) do
       send_command 'halfstaff'
       expect(["Everything's cool, yo.", "No half staff known."].include? replies.last).to be true
@@ -21,6 +25,7 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
   end
 
   it 'gives half-staff affirmative' do
+    mock('halfstaff')
     Timecop.freeze(Time.local(2016, 2, 26, 10, 5, 0)) do
       send_command 'halfstaff'
       expect(replies.count).to eq(2)
@@ -30,6 +35,7 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
   end
 
   it 'checks some edge cases for multi-day half staffs.' do
+    mock('halfstaff')
     Timecop.freeze(Time.local(2016, 3, 9, 10, 5, 0)) do
       send_command 'halfstaff'
       expect(replies.count).to eq(2)
@@ -38,7 +44,17 @@ describe Lita::Handlers::OnewheelHalfstaff, lita_handler: true do
     end
   end
 
+  it 'immediately until' do
+    mock('immediately_until')
+    Timecop.freeze(Time.local(2018, 11, 9, 10, 5, 0)) do
+      send_command 'halfstaff'
+      expect(replies.count).to eq(1)
+      expect(replies[0]).to eq('ENTIRE UNITED STATES - Honoring the Victims of the Tragedy in Thousand Oaks, California - www.flagsexpress.com/Articles.asp?ID=1175')
+    end
+  end
+
   it 'will return history link' do
+    mock('halfstaff')
     send_command 'halfstaff history'
     expect(replies.last).to eq('https://en.wikipedia.org/wiki/Half-mast')
   end

@@ -35,14 +35,21 @@ module Lita
 
         noko_flag = Nokogiri::HTML flag_html
 
+        flag_count = 0
+
         noko_flag.css('a').each do |a_tag|
-          Lita.logger.debug "Parsing #{a_tag['href']}"
           if a_tag['href'].to_s.match /http\:\/\/www\.flagsexpress\.com\/Articles\.asp\?ID\=/i
             if is_at_half_staff(a_tag.text)
               pieces = a_tag.text.split(/ - /)
               Lita.logger.info 'Returning flag data'
               results.push build_result_tet(pieces[1], pieces[2], a_tag['href'])
             end
+
+            if flag_count > 10
+              break
+            end
+            flag_count += 1
+
           end
         end
         results
@@ -59,7 +66,7 @@ module Lita
         current_year = Date::today.year
 
         Lita.logger.debug "Parsing #{pieces[0]}"
-        if pieces[0].match(/#{current_year}/)
+        if pieces[0].match(/#{current_year}/) or pieces[0].match(/immediately/i)
           Lita.logger.info "Checking for flag date match on #{text}"
 
           if date_matches = pieces[0].match(/(\w+\s+\d+,\s+\d+)/)   # February 26, 2016
@@ -90,6 +97,14 @@ module Lita
             end_day = date_matches[3]
             half_staff = does_today_match_date_range(start_month, start_day, start_month, end_day, current_year)
 
+          elsif date_matches = pieces[0].match(/immediately until (\w+)\s+(\d+)/i)   # May 3 until sunset Sunday, December 12
+            # Lita.logger.info 'until sunset'
+            start_month = 1
+            start_day = 1
+            end_month = date_matches[1]
+            end_day = date_matches[2]
+            half_staff = does_today_match_date_range(start_month, start_day, end_month, end_day, current_year)
+
           else
             Lita.logger.info "Couldn't match #{pieces[0]}"
           end
@@ -99,8 +114,8 @@ module Lita
       end
 
       def does_today_match_date_range(start_month, start_day, end_month, end_day, current_year)
-        start_time = DateTime::parse("#{start_month} #{start_day} #{current_year} 00:00")
-        end_time = DateTime::parse("#{end_month} #{end_day} #{current_year} 23:59:59")
+        start_time = DateTime::parse("#{start_month}-#{start_day}-#{current_year} 00:00")
+        end_time = DateTime::parse("#{end_month}-#{end_day}-#{current_year} 23:59:59")
         return (start_time..end_time).cover? DateTime.now
       end
 
