@@ -1,6 +1,6 @@
 Gem::Specification.new do |spec|
   spec.name          = 'lita-onewheel-halfstaff'
-  spec.version       = '0.2.1'
+  spec.version       = '0.3.0'
   spec.authors       = ['Andrew Kreps']
   spec.email         = ['andrew.kreps@gmail.com']
   spec.description   = %q{View the current US flag half-staff status.}
