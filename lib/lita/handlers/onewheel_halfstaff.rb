@@ -37,7 +37,7 @@ module Lita
 
         noko_flag.css('a').each do |a_tag|
           Lita.logger.debug "Parsing #{a_tag['href']}"
-          if a_tag['href'].match /http\:\/\/www\.flagsexpress\.com\/Articles\.asp\?ID\=/i
+          if a_tag['href'].to_s.match /http\:\/\/www\.flagsexpress\.com\/Articles\.asp\?ID\=/i
             if is_at_half_staff(a_tag.text)
               pieces = a_tag.text.split(/ - /)
               Lita.logger.info 'Returning flag data'
