@@ -28,10 +28,15 @@ module Lita
       end
 
       def get_flag_data
-        flag_html = RestClient.get 'http://www.flagsexpress.com/HalfStaff_s/1852.htm'
+        url = 'http://www.flagsexpress.com/HalfStaff_s/1852.htm'
+        Lita.logger.debug "Grabbing #{url}"
+        flag_html = RestClient.get url
         results = []
+
         noko_flag = Nokogiri::HTML flag_html
+
         noko_flag.css('a').each do |a_tag|
+          Lita.logger.debug "Parsing #{a_tag['href']}"
           if a_tag['href'].match /http\:\/\/www\.flagsexpress\.com\/Articles\.asp\?ID\=/i
             if is_at_half_staff(a_tag.text)
               pieces = a_tag.text.split(/ - /)
@@ -52,19 +57,24 @@ module Lita
         half_staff = false
         pieces = text.split(/ - /)
         current_year = Date::today.year
+
+        Lita.logger.debug "Parsing #{pieces[0]}"
         if pieces[0].match(/#{current_year}/)
           Lita.logger.info "Checking for flag date match on #{text}"
+
           if date_matches = pieces[0].match(/(\w+\s+\d+,\s+\d+)/)   # February 26, 2016
             # Lita.logger.info 'Standard'
             # Lita.logger.info date_matches[1]
             date = Date::parse(date_matches[1])
             half_staff = date == Date::today
+
           elsif date_matches = pieces[0].match(/(\w+)\s+(\d+)-(\d+)/)   # March 5-11, 2016
             # Lita.logger.info 'Date range'
             month = date_matches[1]
             day_start = date_matches[2]
             day_end = date_matches[3]
             half_staff = does_today_match_date_range(month, day_start, month, day_end, current_year)
+
           elsif date_matches = pieces[0].match(/(\w+)\s+(\d+) until sunset \w+, (\w+)\s+(\d+)/i)   # May 3 until sunset Sunday, December 12
             # Lita.logger.info 'until sunset'
             start_month = date_matches[1]
@@ -72,12 +82,14 @@ module Lita
             end_month = date_matches[3]
             end_day = date_matches[4]
             half_staff = does_today_match_date_range(start_month, start_day, end_month, end_day, current_year)
+
           elsif date_matches = pieces[0].match(/(\w+)\s+(\d+) until the (\d+)\w+, (\d+)/i)   # March 7 until the 11th, 2016
             # Lita.logger.info 'until sunset'
             start_month = date_matches[1]
             start_day = date_matches[2]
             end_day = date_matches[3]
             half_staff = does_today_match_date_range(start_month, start_day, start_month, end_day, current_year)
+
           else
             Lita.logger.info "Couldn't match #{pieces[0]}"
           end
